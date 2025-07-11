@@ -9,6 +9,7 @@ interface FatMessageProps {
   isLatest?: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function FatMessage({ message, isLatest }: FatMessageProps) {
   if (message.isUser) {
     return (
@@ -41,7 +42,6 @@ export default function FatMessage({ message, isLatest }: FatMessageProps) {
         </div>
 
         <div className="flex-1">
-          {/* Message bubble - no mode indicator */}
           <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl rounded-tl-md px-4 py-3 border border-gray-700 shadow-lg">
             <div className="text-xs text-gray-500 mb-2">
               FatGPT • {new Date(message.timestamp).toLocaleTimeString([], {
