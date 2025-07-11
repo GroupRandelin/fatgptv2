@@ -3,9 +3,19 @@ import { openai } from "@ai-sdk/openai"
 import { responseTypes, getRandomResponseTypes } from "@/lib/response-types"
 import type { NextRequest } from "next/server"
 
+interface ChatMessage {
+  content: string
+  personalityId: string
+}
+
+interface ChatRequest {
+  message: string
+  conversationHistory: ChatMessage[]
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { message, conversationHistory } = await request.json()
+    const { message, conversationHistory }: ChatRequest = await request.json()
 
     // Randomly select which response types to use
     const selectedTypes = getRandomResponseTypes()
@@ -20,7 +30,7 @@ export async function POST(request: NextRequest) {
         // Build minimal context
         const context = conversationHistory
           .slice(-3)
-          .map((msg: any) => `User: ${msg.content}`)
+          .map((msg: ChatMessage) => `User: ${msg.content}`)
           .join("\n")
 
         const fullPrompt = `${responseType.systemPrompt}
@@ -35,7 +45,7 @@ Respond as FatGPT in ${responseType.name.toLowerCase()} mode. Keep it SHORT (1-2
           model: openai("gpt-4o-mini"),
           prompt: fullPrompt,
           maxTokens: 100,
-          temperature: 0.9, // Higher temperature for more variety
+          temperature: 0.9,
         })
 
         return {

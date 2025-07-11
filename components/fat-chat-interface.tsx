@@ -56,7 +56,7 @@ export default function FatChatInterface() {
       const data = await response.json()
 
       if (data.responses) {
-        const aiMessages: Message[] = data.responses.map((resp: any) => ({
+        const aiMessages: Message[] = data.responses.map((resp: { typeId: string; content: string; timestamp: string }) => ({
           id: `${Date.now()}-${resp.typeId}`,
           content: resp.content,
           personalityId: resp.typeId,
